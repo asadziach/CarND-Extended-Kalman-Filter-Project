@@ -24,6 +24,10 @@ void KalmanFilter::update_(const Eigen::VectorXd &z,const Eigen::VectorXd &z_pre
 		Eigen::MatrixXd &H,Eigen::MatrixXd &R){
 
 	VectorXd y = z - z_pred;
+
+	// Normalize angle if result is not in the range pi to -pi
+	y[1] = atan2(sin(y[1]), cos(y[1]));
+
 	MatrixXd Ht = H.transpose();
 	MatrixXd S = H * P_ * Ht + R;
 	MatrixXd Si = S.inverse();
@@ -61,7 +65,6 @@ void KalmanFilter::UpdateEKF(const VectorXd &z, Eigen::MatrixXd &H,
 	// atan2 internally checks for divide by zero
 	float phi = atan2(x_(1), x_(0));
 	/* atan2 returns agnle between pi and -pi. no need to normalize.
-	 * If we were to normalize we could use phi = atan2(sin(phi),cos(phi));
 	 */
 
 	float rhodot = 0;
