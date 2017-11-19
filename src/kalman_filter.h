@@ -6,49 +6,51 @@ class KalmanFilter {
 
 public:
 
-  // state vector
-  Eigen::VectorXd x_;
+	// state vector
+	Eigen::VectorXd x_;
 
-  // state covariance matrix
-  Eigen::MatrixXd P_;
-  /**
-   * Constructor
-   * @param x state vector
-   * @param P state ovariance matrix
-   */
-  KalmanFilter();
+	// state covariance matrix
+	Eigen::MatrixXd P_;
+	/**
+	 * Constructor
+	 * @param x state vector
+	 * @param P state ovariance matrix
+	 */
+	KalmanFilter();
 
-  /**
-   * Destructor
-   */
-  virtual ~KalmanFilter();
+	/**
+	 * Destructor
+	 */
+	virtual ~KalmanFilter();
 
-  /**
-   * Prediction Predicts the state and the state covariance
-   * using the process model
-   * @param delta_T Time between k and k+1 in s
-   * F = state transition matrix
-   * Q = process covariance matrix
-   */
-  void Predict(Eigen::MatrixXd &F, Eigen::MatrixXd &Q);
+	/**
+	 * Prediction Predicts the state and the state covariance
+	 * using the process model
+	 * @param delta_T Time between k and k+1 in s
+	 * F = state transition matrix
+	 * Q = process covariance matrix
+	 */
+	void Predict(Eigen::MatrixXd &F, Eigen::MatrixXd &Q);
 
-  /**
-   * Updates the state by using standard Kalman Filter equations
-   * @param z The measurement at k+1
-   * @param H measurement matrix
-   * @param R measurement covariance matrix
-   */
-  void Update(const Eigen::VectorXd &z, Eigen::MatrixXd &H, Eigen::MatrixXd &R);
+	/**
+	 * Updates the state by using standard Kalman Filter equations
+	 * @param z The measurement at k+1
+	 * @param H measurement matrix
+	 * @param R measurement covariance matrix
+	 */
+	void Update(const Eigen::VectorXd &z, Eigen::MatrixXd &H,
+			Eigen::MatrixXd &R);
 
-  /**
-   * Updates the state by using Extended Kalman Filter equations
-   * @param z The measurement at k+1
-   * @param H measurement matrix
-   * @param R measurement covariance matrix
-   */
-  void UpdateEKF(const Eigen::VectorXd &z, Eigen::MatrixXd &H, Eigen::MatrixXd &R);
+	/**
+	 * Updates the state by using Extended Kalman Filter equations
+	 * @param z The measurement at k+1
+	 * @param H measurement matrix
+	 * @param R measurement covariance matrix
+	 */
+	void UpdateEKF(const Eigen::VectorXd &z, Eigen::MatrixXd &H,
+			Eigen::MatrixXd &R);
 
-  void DebugPrint();
+	void DebugPrint();
 
 };
 
