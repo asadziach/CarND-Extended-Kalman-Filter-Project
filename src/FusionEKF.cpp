@@ -88,6 +88,18 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
+    	// Range - Radial distance from origin
+    	float rho = measurement_pack.raw_measurements_[0];
+    	// Bearing - angle between rho and x
+    	float phi = measurement_pack.raw_measurements_[1];
+    	// Radial Velocity - change of rho - range rate
+    	float rho_dot = measurement_pack.raw_measurements_[2];
+
+    	float px = rho * cos(phi);
+    	float py = rho * sin(phi);
+    	float vx = rho_dot * cos(phi);
+    	float vy = rho_dot * sin(phi);
+    	ekf_.x_ << px, py, vx, vy;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
@@ -154,7 +166,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
-	  //ekf_.UpdateEKF(measurement_pack.raw_measurements_, H_radar_, R_radar_);
+	  Hj_ = tools.CalculateJacobian(ekf_.x_);
+	  ekf_.UpdateEKF(measurement_pack.raw_measurements_, Hj_, R_radar_);
   } else {
     // Laser updates
 	  ekf_.Update(measurement_pack.raw_measurements_, H_laser_, R_laser_);
