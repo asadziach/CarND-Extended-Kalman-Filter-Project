@@ -4,6 +4,9 @@
 
 class KalmanFilter {
 
+private:
+	inline void update_(const Eigen::VectorXd &z,const Eigen::VectorXd &z_pred,
+			Eigen::MatrixXd &H,Eigen::MatrixXd &R);
 public:
 
 	// state vector
