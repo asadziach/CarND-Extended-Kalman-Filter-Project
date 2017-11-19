@@ -50,22 +50,21 @@ void KalmanFilter::Update(const VectorXd &z, Eigen::MatrixXd &H,
 	update_(z,z_pred,H,R);
 }
 
+/**
+ * update the state by using Extended Kalman Filter equations
+ */
 void KalmanFilter::UpdateEKF(const VectorXd &z, Eigen::MatrixXd &H,
 		Eigen::MatrixXd &R) {
-	/**
-	 TODO:
-	 * update the state by using Extended Kalman Filter equations
-	 */
 	/*
 	 * convert x to polar coordinates, the function h(x) maps values from Cartesian coordinates
 	 * to polar coordinates
 	 */
 	float rho = sqrt((x_(0) * x_(0)) + (x_(1) * x_(1)));
 
-	// atan2 internally checks for divide by zero
-	float phi = atan2(x_(1), x_(0));
-	/* atan2 returns agnle between pi and -pi. no need to normalize.
+	/* atan2 internally checks for divide by zero and returns angle between pi and -pi.
+	 * no need to normalize.
 	 */
+	float phi = atan2(x_(1), x_(0));
 
 	float rhodot = 0;
 	//check division by zero
