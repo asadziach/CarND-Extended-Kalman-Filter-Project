@@ -22,6 +22,10 @@ FusionEKF::FusionEKF() {
 	H_laser_ = MatrixXd(2, 4);
 	Hj_ = MatrixXd(3, 4);
 
+	/* The R matrix values and Q noise values are provided. Fine tuning
+	 * is not required for this project. Unscented Kalman Filter project
+	 * up next will explore this.
+	 * */
 	//measurement covariance matrix - laser
 	R_laser_ << 0.0225, 0, 0, 0.0225;
 
@@ -82,9 +86,15 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
 			float px = rho * cos(phi);
 			float py = rho * sin(phi);
-			float vx = rho_dot * cos(phi);
-			float vy = rho_dot * sin(phi);
-			ekf_.x_ << px, py, vx, vy;
+			/* Although radar gives velocity data in the form of the range rate,
+			 * a radar measurement does not contain enough information to determine
+			 * the state variable velocities v​x and v​y. You can, however, use
+			 * the radar measurements ρ and ϕ to initialize the state variable
+			 * locations p​x and p​y.
+			 * float vx = rho_dot * cos(phi);
+			 * float vy = rho_dot * sin(phi);
+			 * */
+			ekf_.x_ << px, py, 0, 0;
 
 		} else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
 			/**
